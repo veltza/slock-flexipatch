@@ -457,6 +457,15 @@ readpw(Display *dpy, struct xrandr *rr, struct lock **locks, int nscreens,
 				XRaiseWindow(dpy, locks[screen]->win);
 		}
 
+		#if DWM_LOGO_PATCH
+		/* Redraw dwm logo when monitors wake up from sleep mode. */
+		/* This attempts to fix some driver or hardware issues. */
+		if (ev.type == MapNotify || ev.type == UnmapNotify) {
+			for (screen = 0; screen < nscreens; screen++)
+				drawlogo(dpy, locks[screen], oldc);
+		}
+		#endif // DWM_LOGO_PATCH
+
 		#if AUTO_TIMEOUT_PATCH
 		}
 
